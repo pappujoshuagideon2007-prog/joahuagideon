@@ -1,0 +1,536 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>P. Joshua Gideon — Animation & Gaming Student</title>
+<meta name="description" content="Portfolio and resume of P. Joshua Gideon, BSc Animation & Gaming student, athlete, cricketer and electronics tinkerer.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;700&family=Orbitron:wght@500;700;900&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#07060f;
+  --bg2:#0e0c1d;
+  --panel:rgba(255,255,255,.04);
+  --line:rgba(255,255,255,.1);
+  --text:#ecebff;
+  --mute:#9a97b8;
+  --a:#7c5cff;      /* violet */
+  --b:#00e5ff;      /* cyan */
+  --c:#ff3d9a;      /* magenta */
+  --gold:#ffd24a;
+  --silver:#cfd6e6;
+  --bronze:#d98a4e;
+  --display:'Orbitron','Space Grotesk',system-ui,sans-serif;
+  --body:'Space Grotesk',system-ui,-apple-system,'Segoe UI',sans-serif;
+  --mono:'JetBrains Mono',ui-monospace,Consolas,monospace;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth;scroll-padding-top:80px}
+body{background:var(--bg);color:var(--text);font-family:var(--body);line-height:1.6;overflow-x:hidden;-webkit-font-smoothing:antialiased}
+body.locked{overflow:hidden}
+a{color:inherit;text-decoration:none}
+::selection{background:var(--c);color:#fff}
+
+/* ---------- background layers ---------- */
+#fx{position:fixed;inset:0;z-index:0;pointer-events:none}
+.grid-floor{position:fixed;left:-50%;right:-50%;bottom:-10vh;height:55vh;z-index:0;pointer-events:none;
+  background:
+   linear-gradient(transparent 0,rgba(124,92,255,.35) 1px,transparent 2px) 0 0/100% 48px,
+   linear-gradient(90deg,transparent 0,rgba(0,229,255,.25) 1px,transparent 2px) 0 0/64px 100%;
+  transform:perspective(500px) rotateX(62deg);
+  mask-image:linear-gradient(to top,#000 10%,transparent 85%);
+  -webkit-mask-image:linear-gradient(to top,#000 10%,transparent 85%);
+  animation:floor 6s linear infinite;opacity:.55}
+@keyframes floor{to{background-position:0 48px,64px 0}}
+.glow{position:fixed;width:520px;height:520px;border-radius:50%;pointer-events:none;z-index:1;
+  background:radial-gradient(circle,rgba(124,92,255,.22),transparent 65%);
+  transform:translate(-50%,-50%);left:50%;top:50%;transition:opacity .3s}
+.scan{position:fixed;inset:0;z-index:60;pointer-events:none;opacity:.07;
+  background:repeating-linear-gradient(0deg,#000 0 1px,transparent 1px 3px)}
+
+main,header.nav,footer{position:relative;z-index:2}
+
+/* ---------- intro / press start ---------- */
+#intro{position:fixed;inset:0;z-index:100;background:var(--bg);display:grid;place-items:center;text-align:center;
+  transition:opacity .8s ease,visibility .8s}
+#intro.gone{opacity:0;visibility:hidden}
+#intro .logo{font-family:var(--display);font-weight:900;font-size:clamp(2rem,7vw,4.5rem);letter-spacing:.08em;
+  background:linear-gradient(90deg,var(--b),var(--a),var(--c));-webkit-background-clip:text;background-clip:text;color:transparent}
+#intro .sub{font-family:var(--mono);color:var(--mute);margin-top:.6rem;font-size:.85rem;letter-spacing:.2em}
+.loadbar{width:min(320px,70vw);height:6px;margin:2rem auto 1.4rem;background:var(--line);border-radius:9px;overflow:hidden}
+.loadbar i{display:block;height:100%;width:0;background:linear-gradient(90deg,var(--b),var(--c));box-shadow:0 0 14px var(--b);transition:width .15s}
+#start{font-family:var(--display);font-size:.9rem;letter-spacing:.3em;color:var(--text);background:none;border:1px solid var(--b);
+  padding:.9rem 1.8rem;cursor:pointer;opacity:0;pointer-events:none;transition:.3s;border-radius:4px}
+#start.ready{opacity:1;pointer-events:auto;animation:blink 1.2s steps(2) infinite}
+#start:hover{background:var(--b);color:#00131a;box-shadow:0 0 30px var(--b)}
+@keyframes blink{50%{box-shadow:0 0 22px rgba(0,229,255,.55)}}
+
+/* ---------- nav ---------- */
+header.nav{position:fixed;top:0;left:0;right:0;z-index:50;display:flex;justify-content:space-between;align-items:center;
+  padding:.9rem clamp(1rem,4vw,3rem);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);
+  background:linear-gradient(rgba(7,6,15,.75),rgba(7,6,15,.2));border-bottom:1px solid var(--line)}
+.brand{font-family:var(--display);font-weight:700;letter-spacing:.12em;font-size:.95rem}
+.brand b{color:var(--b)}
+nav ul{display:flex;gap:1.6rem;list-style:none}
+nav a{font-family:var(--mono);font-size:.78rem;color:var(--mute);text-transform:uppercase;letter-spacing:.12em;position:relative;padding:.3rem 0;transition:.2s}
+nav a::after{content:"";position:absolute;left:0;bottom:0;height:2px;width:0;background:var(--b);transition:.3s}
+nav a:hover,nav a.on{color:var(--text)}
+nav a:hover::after,nav a.on::after{width:100%}
+.xpbar{position:fixed;top:0;left:0;height:3px;z-index:70;width:0;background:linear-gradient(90deg,var(--b),var(--a),var(--c));box-shadow:0 0 12px var(--a)}
+@media(max-width:760px){nav ul{display:none}}
+
+/* ---------- layout ---------- */
+section{padding:clamp(5rem,10vw,8rem) clamp(1rem,5vw,4rem);max-width:1180px;margin:0 auto}
+.eyebrow{font-family:var(--mono);color:var(--b);font-size:.8rem;letter-spacing:.25em;text-transform:uppercase;margin-bottom:.8rem;display:flex;align-items:center;gap:.8rem}
+.eyebrow::before{content:"";width:36px;height:1px;background:var(--b)}
+h2{font-family:var(--display);font-weight:700;font-size:clamp(1.6rem,4vw,2.6rem);letter-spacing:.04em;line-height:1.15;margin-bottom:2.4rem}
+h2 span{background:linear-gradient(90deg,var(--a),var(--c));-webkit-background-clip:text;background-clip:text;color:transparent}
+
+.reveal{opacity:0;transform:translateY(34px);transition:opacity .9s cubic-bezier(.2,.7,.2,1),transform .9s cubic-bezier(.2,.7,.2,1)}
+.reveal.in{opacity:1;transform:none}
+.d1{transition-delay:.08s}.d2{transition-delay:.16s}.d3{transition-delay:.24s}.d4{transition-delay:.32s}
+
+.card{background:var(--panel);border:1px solid var(--line);border-radius:16px;padding:1.6rem;backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);
+  position:relative;overflow:hidden;transition:transform .35s,border-color .35s,box-shadow .35s}
+.card::before{content:"";position:absolute;inset:0;background:radial-gradient(400px circle at var(--mx,50%) var(--my,0%),rgba(124,92,255,.18),transparent 45%);opacity:0;transition:.3s}
+.card:hover{border-color:rgba(124,92,255,.6);box-shadow:0 10px 50px -15px rgba(124,92,255,.5)}
+.card:hover::before{opacity:1}
+.card>*{position:relative}
+
+/* ---------- hero ---------- */
+#hero{min-height:100vh;display:grid;grid-template-columns:1.15fr .85fr;gap:3rem;align-items:center;padding-top:7rem}
+.tag{display:inline-flex;align-items:center;gap:.6rem;font-family:var(--mono);font-size:.78rem;padding:.45rem .9rem;border:1px solid var(--line);border-radius:99px;background:var(--panel);margin-bottom:1.6rem}
+.tag i{width:8px;height:8px;border-radius:50%;background:#3dff8b;box-shadow:0 0 10px #3dff8b;animation:pulse 1.6s infinite}
+@keyframes pulse{50%{transform:scale(1.6);opacity:.5}}
+h1{font-family:var(--display);font-weight:900;font-size:clamp(2.4rem,7vw,5.2rem);line-height:1.02;letter-spacing:.02em}
+h1 .g{display:block;background:linear-gradient(100deg,var(--b),var(--a) 50%,var(--c));-webkit-background-clip:text;background-clip:text;color:transparent;background-size:200% 100%;animation:shift 6s ease-in-out infinite alternate}
+@keyframes shift{to{background-position:100% 0}}
+.role{font-family:var(--mono);font-size:clamp(.95rem,2vw,1.2rem);margin-top:1.4rem;color:var(--mute);min-height:1.8em}
+.role b{color:var(--text);font-weight:600}
+.caret{display:inline-block;width:.6ch;height:1.1em;background:var(--b);vertical-align:-.15em;animation:blink2 1s steps(2) infinite}
+@keyframes blink2{50%{opacity:0}}
+.lede{max-width:52ch;margin-top:1.4rem;color:var(--mute);font-size:1.05rem}
+.cta{display:flex;flex-wrap:wrap;gap:1rem;margin-top:2.2rem}
+.btn{font-family:var(--mono);font-size:.82rem;letter-spacing:.1em;text-transform:uppercase;padding:.95rem 1.5rem;border-radius:10px;border:1px solid var(--line);cursor:pointer;transition:.3s;display:inline-flex;gap:.6rem;align-items:center;color:var(--text);background:var(--panel)}
+.btn.p{background:linear-gradient(110deg,var(--a),var(--c));border-color:transparent;box-shadow:0 8px 34px -8px var(--a)}
+.btn:hover{transform:translateY(-3px);border-color:var(--b);box-shadow:0 12px 40px -10px var(--b)}
+
+/* player card */
+.player{perspective:900px}
+.pc{transform-style:preserve-3d;transition:transform .15s ease-out;border-radius:22px;padding:1.8rem;
+  background:linear-gradient(155deg,rgba(124,92,255,.22),rgba(255,61,154,.1) 55%,rgba(0,229,255,.12));
+  border:1px solid rgba(255,255,255,.18);box-shadow:0 30px 80px -30px rgba(124,92,255,.7);position:relative;overflow:hidden}
+.pc::after{content:"";position:absolute;inset:0;background:linear-gradient(115deg,transparent 30%,rgba(255,255,255,.14) 48%,transparent 62%);transform:translateX(-120%);animation:sheen 5s ease-in-out infinite}
+@keyframes sheen{60%,100%{transform:translateX(120%)}}
+.pc-top{display:flex;justify-content:space-between;font-family:var(--mono);font-size:.72rem;color:var(--mute);letter-spacing:.15em}
+.avatar{width:128px;height:128px;margin:1.4rem auto 1rem;border-radius:28px;display:grid;place-items:center;
+  font-family:var(--display);font-weight:900;font-size:2.8rem;letter-spacing:.04em;
+  background:conic-gradient(from 140deg,var(--a),var(--c),var(--b),var(--a));position:relative;transform:translateZ(40px)}
+.avatar span{position:absolute;inset:4px;border-radius:24px;background:var(--bg2);display:grid;place-items:center}
+.avatar em{font-style:normal;background:linear-gradient(120deg,var(--b),var(--c));-webkit-background-clip:text;background-clip:text;color:transparent}
+.pc h3{font-family:var(--display);text-align:center;font-size:1.15rem;letter-spacing:.06em;transform:translateZ(30px)}
+.pc .cls{text-align:center;color:var(--b);font-family:var(--mono);font-size:.78rem;margin-top:.2rem}
+.stats{margin-top:1.4rem;display:grid;gap:.8rem}
+.stat{display:grid;grid-template-columns:90px 1fr 44px;gap:.7rem;align-items:center;font-family:var(--mono);font-size:.72rem;color:var(--mute)}
+.stat .bar{height:7px;border-radius:9px;background:rgba(255,255,255,.08);overflow:hidden}
+.stat .bar i{display:block;height:100%;width:0;border-radius:9px;background:linear-gradient(90deg,var(--b),var(--a));transition:width 1.6s cubic-bezier(.2,.8,.2,1)}
+.stat:nth-child(2) .bar i{background:linear-gradient(90deg,var(--a),var(--c))}
+.stat:nth-child(3) .bar i{background:linear-gradient(90deg,var(--c),var(--gold))}
+.stat b{color:var(--text);text-align:right}
+.scroll{position:absolute;bottom:2rem;left:50%;transform:translateX(-50%);font-family:var(--mono);font-size:.7rem;letter-spacing:.3em;color:var(--mute);display:flex;flex-direction:column;align-items:center;gap:.6rem}
+.scroll i{width:1px;height:38px;background:linear-gradient(var(--b),transparent);animation:drip 1.8s infinite}
+@keyframes drip{0%{transform:scaleY(0);transform-origin:top}50%{transform:scaleY(1);transform-origin:top}51%{transform-origin:bottom}100%{transform:scaleY(0);transform-origin:bottom}}
+@media(max-width:900px){#hero{grid-template-columns:1fr}.player{max-width:380px}.scroll{display:none}}
+
+/* ---------- about ---------- */
+.about{display:grid;grid-template-columns:1.2fr .8fr;gap:1.4rem}
+.about p{color:var(--mute);font-size:1.05rem;margin-bottom:1rem}
+.about p strong{color:var(--text);font-weight:500}
+.quest{display:grid;gap:.9rem}
+.quest .row{display:flex;gap:1rem;align-items:flex-start}
+.quest .ic{flex:none;width:42px;height:42px;border-radius:12px;display:grid;place-items:center;background:rgba(124,92,255,.15);border:1px solid rgba(124,92,255,.4);font-size:1.2rem}
+.quest h4{font-size:.95rem;font-weight:500}
+.quest small{color:var(--mute);font-family:var(--mono);font-size:.74rem}
+@media(max-width:860px){.about{grid-template-columns:1fr}}
+
+/* ---------- counters ---------- */
+.counters{display:grid;grid-template-columns:repeat(4,1fr);gap:1.2rem;margin-top:1.4rem}
+.counter{text-align:center}
+.counter .n{font-family:var(--display);font-weight:900;font-size:clamp(2rem,5vw,3.2rem);background:linear-gradient(120deg,var(--b),var(--a));-webkit-background-clip:text;background-clip:text;color:transparent}
+.counter span{font-family:var(--mono);font-size:.72rem;letter-spacing:.18em;color:var(--mute);text-transform:uppercase}
+@media(max-width:700px){.counters{grid-template-columns:repeat(2,1fr)}}
+
+/* ---------- skill tree ---------- */
+.tree{display:grid;grid-template-columns:repeat(3,1fr);gap:1.2rem}
+.tree h3{font-family:var(--display);font-size:1rem;letter-spacing:.08em;margin-bottom:.4rem}
+.tree .lv{font-family:var(--mono);font-size:.72rem;color:var(--b);margin-bottom:1rem;display:block}
+.chips{display:flex;flex-wrap:wrap;gap:.5rem}
+.chip{font-family:var(--mono);font-size:.76rem;padding:.4rem .8rem;border-radius:8px;border:1px solid var(--line);background:rgba(255,255,255,.03);transition:.25s}
+.chip:hover{border-color:var(--c);color:var(--c);transform:translateY(-2px)}
+.chip.hot{border-color:rgba(0,229,255,.5);color:var(--b)}
+.ico{font-size:1.8rem;margin-bottom:.7rem;display:block}
+@media(max-width:860px){.tree{grid-template-columns:1fr}}
+
+/* ---------- timeline ---------- */
+.tl{position:relative;padding-left:2rem;border-left:1px solid var(--line);display:grid;gap:1.4rem}
+.tl .it{position:relative}
+.tl .it::before{content:"";position:absolute;left:calc(-2rem - 6px);top:1.9rem;width:11px;height:11px;border-radius:50%;background:var(--bg);border:2px solid var(--b);box-shadow:0 0 14px var(--b)}
+.tl .it.now::before{background:var(--b);animation:pulse 1.6s infinite}
+.tl .when{font-family:var(--mono);font-size:.74rem;color:var(--b);letter-spacing:.14em;text-transform:uppercase}
+.tl h3{font-size:1.2rem;font-weight:500;margin:.3rem 0}
+.tl p{color:var(--mute);font-size:.95rem}
+.score{display:inline-block;margin-top:.6rem;font-family:var(--display);font-weight:700;padding:.25rem .8rem;border-radius:99px;background:rgba(124,92,255,.15);border:1px solid rgba(124,92,255,.5);font-size:.85rem}
+
+/* ---------- trophy room ---------- */
+.medals{display:flex;gap:1rem;flex-wrap:wrap;margin-bottom:1.6rem}
+.mtally{display:flex;align-items:center;gap:.7rem;padding:.7rem 1.1rem;border-radius:12px;border:1px solid var(--line);background:var(--panel);font-family:var(--mono);font-size:.82rem}
+.disc{width:22px;height:22px;border-radius:50%;display:inline-block;box-shadow:inset 0 -3px 0 rgba(0,0,0,.25),0 0 14px currentColor}
+.disc.g{background:var(--gold);color:var(--gold)}.disc.s{background:var(--silver);color:var(--silver)}.disc.b{background:var(--bronze);color:var(--bronze)}
+.ach{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:1rem}
+.a{display:flex;gap:1rem;align-items:center;padding:1.1rem 1.2rem;cursor:default}
+.a .disc{flex:none;width:34px;height:34px}
+.a h4{font-size:.98rem;font-weight:500;line-height:1.3}
+.a small{font-family:var(--mono);font-size:.72rem;color:var(--mute)}
+.a.gold{border-color:rgba(255,210,74,.35)}
+.a .rare{margin-left:auto;font-family:var(--mono);font-size:.62rem;color:var(--gold);letter-spacing:.14em;border:1px solid rgba(255,210,74,.4);padding:.15rem .45rem;border-radius:5px;flex:none}
+.unlock{font-family:var(--mono);font-size:.7rem;color:#3dff8b;display:block;margin-bottom:.2rem;letter-spacing:.1em}
+.sub-h{font-family:var(--display);font-size:1rem;letter-spacing:.1em;margin:2.4rem 0 1rem;color:var(--mute)}
+
+/* ---------- contact ---------- */
+.contact{text-align:center;padding:clamp(2rem,6vw,4rem)}
+.contact h2{margin-bottom:1rem}
+.contact p{color:var(--mute);max-width:46ch;margin:0 auto 2rem}
+.links{display:flex;flex-wrap:wrap;gap:1rem;justify-content:center}
+footer{text-align:center;padding:2.5rem 1rem 3rem;font-family:var(--mono);font-size:.74rem;color:var(--mute);border-top:1px solid var(--line)}
+footer kbd{border:1px solid var(--line);padding:.1rem .4rem;border-radius:4px;color:var(--b)}
+
+/* toast */
+#toast{position:fixed;bottom:1.6rem;right:1.6rem;z-index:90;font-family:var(--mono);font-size:.8rem;padding:.9rem 1.2rem;border-radius:10px;
+  background:rgba(14,12,29,.92);border:1px solid var(--b);box-shadow:0 0 30px -5px var(--b);transform:translateY(140%);transition:transform .5s cubic-bezier(.2,.9,.3,1.2);max-width:300px}
+#toast.show{transform:none}
+#toast b{color:var(--gold);display:block;font-size:.68rem;letter-spacing:.2em;margin-bottom:.2rem}
+
+@media (pointer:coarse){.glow{display:none}}
+@media (prefers-reduced-motion:reduce){
+  *{animation:none!important;transition:none!important}
+  .reveal{opacity:1;transform:none}
+  html{scroll-behavior:auto}
+}
+@media print{
+  #intro,#fx,.grid-floor,.glow,.scan,.xpbar,header.nav,#toast,.cta,.scroll{display:none!important}
+  :root{--bg:#fff;--text:#111;--mute:#444;--line:#ccc;--panel:#fff}
+  body{background:#fff;color:#111}
+  .reveal{opacity:1;transform:none}
+  section{padding:1.4rem 1rem;page-break-inside:avoid}
+  h1 .g,h2 span,.counter .n{color:#222;background:none;-webkit-text-fill-color:#222}
+  .card{box-shadow:none;border:1px solid #ccc}
+}
+</style>
+</head>
+<body class="locked">
+
+<div class="xpbar" id="xp"></div>
+<canvas id="fx"></canvas>
+<div class="grid-floor"></div>
+<div class="glow" id="glow"></div>
+<div class="scan"></div>
+
+<!-- INTRO -->
+<div id="intro">
+  <div>
+    <div class="logo">J.GIDEON</div>
+    <div class="sub">PLAYER ONE · LOADING PORTFOLIO</div>
+    <div class="loadbar"><i id="lb"></i></div>
+    <button id="start">▶ PRESS START</button>
+  </div>
+</div>
+
+<header class="nav">
+  <a href="#hero" class="brand">JOSHUA<b>.</b>GIDEON</a>
+  <nav>
+    <ul>
+      <li><a href="#about">About</a></li>
+      <li><a href="#skills">Skills</a></li>
+      <li><a href="#journey">Journey</a></li>
+      <li><a href="#trophies">Trophies</a></li>
+      <li><a href="#contact">Contact</a></li>
+    </ul>
+  </nav>
+</header>
+
+<main>
+  <!-- HERO -->
+  <section id="hero">
+    <div>
+      <div class="tag reveal"><i></i> Currently studying BSc Animation &amp; Gaming</div>
+      <h1 class="reveal d1">P. Joshua<span class="g">Gideon</span></h1>
+      <p class="role reveal d2">&gt; I am a <b id="typed"></b><span class="caret"></span></p>
+      <p class="lede reveal d3">A disciplined, team-driven student stepping into the world of animation and game design — backed by school leadership, a shelf of sports medals, and a hands-on love for electronics and music.</p>
+      <div class="cta reveal d4">
+        <a class="btn p" href="#trophies">View Achievements →</a>
+        <a class="btn" href="mailto:pappupadmaprasad7@gmail.com">✉ Get in touch</a>
+        <button class="btn" onclick="window.print()">⬇ Save as PDF</button>
+      </div>
+    </div>
+
+    <div class="player reveal d2">
+      <div class="pc" id="pc">
+        <div class="pc-top"><span>PLAYER CARD</span><span>ID · 2026</span></div>
+        <div class="avatar"><span><em>JG</em></span></div>
+        <h3>P. JOSHUA GIDEON</h3>
+        <div class="cls">Class: Animator &amp; Game Dev · Student</div>
+        <div class="stats">
+          <div class="stat"><span>LEADERSHIP</span><div class="bar"><i data-w="88"></i></div><b>A</b></div>
+          <div class="stat"><span>ATHLETICS</span><div class="bar"><i data-w="94"></i></div><b>S</b></div>
+          <div class="stat"><span>CREATIVITY</span><div class="bar"><i data-w="90"></i></div><b>A</b></div>
+        </div>
+      </div>
+    </div>
+    <div class="scroll"><span>SCROLL</span><i></i></div>
+  </section>
+
+  <!-- ABOUT -->
+  <section id="about">
+    <div class="eyebrow reveal">01 · Origin story</div>
+    <h2 class="reveal">Building worlds, <span>one frame at a time</span></h2>
+    <div class="about">
+      <div class="card reveal">
+        <p>I'm <strong>P. Joshua Gideon</strong>, an undergraduate student currently pursuing a <strong>BSc in Animation &amp; Gaming</strong>. I'm motivated, disciplined and always learning — and I want to apply those skills in both academic and professional environments.</p>
+        <p>Outside the classroom I've been an <strong>Assistant School Pupil Leader</strong>, a multi-sport medallist, a cricketer who has played the <strong>All India T20 Cricket Tournament</strong>, a keyboard player and an <strong>electronics experimenter</strong>. Games and animation are where all of that meets — discipline, teamwork, music, logic and play.</p>
+        <p>I'm looking for opportunities to keep growing, contribute to a team, and build something people enjoy.</p>
+      </div>
+      <div class="card quest reveal d2">
+        <div class="row"><div class="ic">🎓</div><div><h4>Current Quest</h4><small>BSc Animation &amp; Gaming</small></div></div>
+        <div class="row"><div class="ic">🏏</div><div><h4>Side Quest</h4><small>Professional cricket</small></div></div>
+        <div class="row"><div class="ic">🎹</div><div><h4>Soundtrack</h4><small>Musical keyboard</small></div></div>
+        <div class="row"><div class="ic">🔌</div><div><h4>Workshop</h4><small>Electronics experiments</small></div></div>
+      </div>
+    </div>
+    <div class="counters">
+      <div class="card counter reveal"><div class="n" data-n="11">0</div><span>Medals</span></div>
+      <div class="card counter reveal d1"><div class="n" data-n="13">0</div><span>Certificates</span></div>
+      <div class="card counter reveal d2"><div class="n" data-n="7">0</div><span>Sports won</span></div>
+      <div class="card counter reveal d3"><div class="n" data-n="3">0</div><span>Gold medals</span></div>
+    </div>
+  </section>
+
+  <!-- SKILLS -->
+  <section id="skills">
+    <div class="eyebrow reveal">02 · Skill tree</div>
+    <h2 class="reveal">Unlocked <span>abilities</span></h2>
+    <div class="tree">
+      <div class="card reveal">
+        <span class="ico">🎮</span><h3>Creative Tech</h3><span class="lv">IN PROGRESS · BSc ANIMATION &amp; GAMING</span>
+        <div class="chips"><span class="chip hot">Animation</span><span class="chip hot">Game Design</span><span class="chip">Electronics Experimentation</span><span class="chip">Musical Keyboard</span></div>
+      </div>
+      <div class="card reveal d1">
+        <span class="ico">🤝</span><h3>Team Skills</h3><span class="lv">UNLOCKED</span>
+        <div class="chips"><span class="chip hot">Leadership</span><span class="chip hot">Teamwork</span><span class="chip">Communication</span><span class="chip">Organisation</span></div>
+      </div>
+      <div class="card reveal d2">
+        <span class="ico">🏅</span><h3>Athletics</h3><span class="lv">UNLOCKED</span>
+        <div class="chips"><span class="chip hot">Cricket</span><span class="chip">Volleyball</span><span class="chip">Kabaddi</span><span class="chip">Shot Put</span><span class="chip">Disc Throw</span><span class="chip">Dodge Ball</span><span class="chip">Karate (Yellow Belt)</span></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- JOURNEY -->
+  <section id="journey">
+    <div class="eyebrow reveal">03 · Level progression</div>
+    <h2 class="reveal">The <span>journey</span> so far</h2>
+    <div class="tl">
+      <div class="it now reveal card">
+        <div class="when">Present</div>
+        <h3>BSc Animation &amp; Gaming</h3>
+        <p>Undergraduate studies in animation and game development.</p>
+      </div>
+      <div class="it reveal card d1">
+        <div class="when">Intermediate · Class XI–XII</div>
+        <h3>Senior Secondary Education</h3>
+        <p>Completed Intermediate education.</p>
+        <span class="score">73%</span>
+      </div>
+      <div class="it reveal card d2">
+        <div class="when">Secondary School · Class X</div>
+        <h3>SSC &amp; Assistant School Pupil Leader</h3>
+        <p>Completed SSC with strong results while serving as Assistant School Pupil Leader.</p>
+        <span class="score">87%</span>
+      </div>
+      <div class="it reveal card d3">
+        <div class="when">Primary School</div>
+        <h3>Abacus Excellence</h3>
+        <p>Earned three consecutive Excellent Merit Certificates with 95% performance in Abacus.</p>
+        <span class="score">95% · 3× Merit</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- TROPHIES -->
+  <section id="trophies">
+    <div class="eyebrow reveal">04 · Trophy room</div>
+    <h2 class="reveal">Achievements <span>unlocked</span></h2>
+
+    <div class="medals reveal">
+      <div class="mtally"><i class="disc g"></i> 3 Gold</div>
+      <div class="mtally"><i class="disc s"></i> 6 Silver</div>
+      <div class="mtally"><i class="disc b"></i> 2 Bronze</div>
+      <div class="mtally">🏆 11 medals · 13 certificates</div>
+    </div>
+
+    <div class="sub-h reveal">// SPORTS</div>
+    <div class="ach">
+      <div class="card a gold reveal"><i class="disc g"></i><div><span class="unlock">ACHIEVEMENT UNLOCKED</span><h4>Gold · Dodge Ball</h4><small>1st place</small></div><span class="rare">RARE</span></div>
+      <div class="card a gold reveal d1"><i class="disc g"></i><div><span class="unlock">ACHIEVEMENT UNLOCKED</span><h4>Gold · Kabaddi</h4><small>1st place + Silver (2nd)</small></div><span class="rare">RARE</span></div>
+      <div class="card a gold reveal d2"><i class="disc g"></i><div><span class="unlock">ACHIEVEMENT UNLOCKED</span><h4>Gold · Shot Put</h4><small>1st place + Bronze (3rd)</small></div><span class="rare">RARE</span></div>
+      <div class="card a reveal"><i class="disc s"></i><div><h4>Silver · Disc Throw ×2</h4><small>2nd place, twice</small></div></div>
+      <div class="card a reveal d1"><i class="disc s"></i><div><h4>Silver · Volleyball</h4><small>2nd place</small></div></div>
+      <div class="card a reveal d2"><i class="disc s"></i><div><h4>Silver · Running Race</h4><small>2nd place</small></div></div>
+      <div class="card a reveal"><i class="disc b"></i><div><h4>Bronze · Relay Race</h4><small>3rd place</small></div></div>
+    </div>
+
+    <div class="sub-h reveal">// MARTIAL ARTS &amp; CRICKET</div>
+    <div class="ach">
+      <div class="card a reveal"><i class="disc s"></i><div><h4>Silver · e-Kata International Championship</h4><small>2021</small></div></div>
+      <div class="card a reveal d1"><span style="font-size:1.8rem">🥋</span><div><h4>Yellow Belt</h4><small>Karate Association of India (KAI)</small></div></div>
+      <div class="card a reveal d2"><span style="font-size:1.8rem">🏏</span><div><h4>All India T20 Cricket Tournament</h4><small>Participant</small></div></div>
+    </div>
+
+    <div class="sub-h reveal">// ACADEMIC &amp; LEADERSHIP</div>
+    <div class="ach">
+      <div class="card a reveal"><span style="font-size:1.8rem">🧮</span><div><h4>3× Excellent Merit · Abacus</h4><small>95% performance, consecutive</small></div></div>
+      <div class="card a reveal d1"><span style="font-size:1.8rem">🎖️</span><div><h4>Assistant School Pupil Leader</h4><small>Secondary school</small></div></div>
+    </div>
+  </section>
+
+  <!-- CONTACT -->
+  <section id="contact">
+    <div class="card contact reveal">
+      <div class="eyebrow" style="justify-content:center">05 · Next level</div>
+      <h2>Ready to <span>team up?</span></h2>
+      <p>Open to internships, collaborations and opportunities in animation, game design and creative tech. Let's build something great.</p>
+      <div class="links">
+        <a class="btn p" href="mailto:pappupadmaprasad7@gmail.com">✉ pappupadmaprasad7@gmail.com</a>
+        <a class="btn" href="tel:+919490077713">☎ +91 94900 77713</a>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer>
+  © 2026 P. Joshua Gideon · Built with HTML, CSS &amp; a little game magic<br>
+  Hint: try the Konami code <kbd>↑ ↑ ↓ ↓ ← → ← → B A</kbd>
+</footer>
+
+<div id="toast"><b>ACHIEVEMENT UNLOCKED</b><span id="toastMsg"></span></div>
+
+<script>
+(function(){
+  const $=s=>document.querySelector(s), $$=s=>[...document.querySelectorAll(s)];
+  const reduce=matchMedia('(prefers-reduced-motion:reduce)').matches;
+
+  /* ---- intro loader ---- */
+  const lb=$('#lb'), start=$('#start'), intro=$('#intro');
+  let p=0;
+  const tick=setInterval(()=>{p=Math.min(100,p+Math.random()*14+4);lb.style.width=p+'%';
+    if(p>=100){clearInterval(tick);start.classList.add('ready')}},reduce?10:150);
+  function begin(){
+    intro.classList.add('gone');document.body.classList.remove('locked');
+    typeLoop();setTimeout(fillStats,500);
+    setTimeout(()=>toast('Welcome, player. Scroll to explore.'),1400);
+  }
+  start.addEventListener('click',begin);
+  addEventListener('keydown',e=>{if((e.key==='Enter'||e.key===' ')&&start.classList.contains('ready')&&!intro.classList.contains('gone')){e.preventDefault();begin()}});
+
+  /* ---- toast ---- */
+  let tt;function toast(msg){$('#toastMsg').textContent=msg;const t=$('#toast');t.classList.add('show');clearTimeout(tt);tt=setTimeout(()=>t.classList.remove('show'),3200)}
+
+  /* ---- typing ---- */
+  const roles=['BSc Animation & Gaming student','future game designer','aspiring animator','All India T20 cricketer','multi-sport medallist','electronics experimenter'];
+  let ri=0,ci=0,del=false;const el=$('#typed');
+  function typeLoop(){
+    if(reduce){el.textContent=roles[0];return}
+    const w=roles[ri];
+    el.textContent=w.slice(0,ci);
+    if(!del&&ci<w.length){ci++;setTimeout(typeLoop,70)}
+    else if(!del){del=true;setTimeout(typeLoop,1400)}
+    else if(ci>0){ci--;setTimeout(typeLoop,32)}
+    else{del=false;ri=(ri+1)%roles.length;setTimeout(typeLoop,300)}
+  }
+
+  /* ---- stat bars ---- */
+  function fillStats(){$$('.stat .bar i').forEach(i=>i.style.width=i.dataset.w+'%')}
+
+  /* ---- reveal + counters ---- */
+  const io=new IntersectionObserver(es=>es.forEach(e=>{
+    if(e.isIntersecting){e.target.classList.add('in');io.unobserve(e.target);
+      const n=e.target.querySelector('[data-n]');if(n)count(n)}
+  }),{threshold:.15});
+  $$('.reveal').forEach(r=>io.observe(r));
+  function count(n){
+    const to=+n.dataset.n;if(reduce){n.textContent=to;return}
+    let s=null;const dur=1400;
+    (function f(t){if(!s)s=t;const k=Math.min(1,(t-s)/dur);n.textContent=Math.round(to*(1-Math.pow(1-k,3)));if(k<1)requestAnimationFrame(f)})(performance.now());
+  }
+
+  /* ---- scroll progress + active nav ---- */
+  const xp=$('#xp'),links=$$('nav a'),secs=links.map(a=>$(a.getAttribute('href')));
+  function onScroll(){
+    const h=document.documentElement;xp.style.width=(h.scrollTop/(h.scrollHeight-h.clientHeight)*100)+'%';
+    const y=scrollY+innerHeight*.35;
+    secs.forEach((s,i)=>links[i].classList.toggle('on',s.offsetTop<=y&&s.offsetTop+s.offsetHeight>y));
+  }
+  addEventListener('scroll',onScroll,{passive:true});onScroll();
+
+  /* ---- cursor glow, card spotlight, 3D tilt ---- */
+  const glow=$('#glow');
+  addEventListener('pointermove',e=>{glow.style.left=e.clientX+'px';glow.style.top=e.clientY+'px';mx=e.clientX;my=e.clientY});
+  $$('.card').forEach(c=>c.addEventListener('pointermove',e=>{const r=c.getBoundingClientRect();c.style.setProperty('--mx',(e.clientX-r.left)+'px');c.style.setProperty('--my',(e.clientY-r.top)+'px')}));
+  const pc=$('#pc');
+  if(!reduce&&!matchMedia('(pointer:coarse)').matches){
+    pc.parentElement.addEventListener('pointermove',e=>{const r=pc.getBoundingClientRect();const x=(e.clientX-r.left)/r.width-.5,y=(e.clientY-r.top)/r.height-.5;pc.style.transform=`rotateY(${x*16}deg) rotateX(${-y*16}deg)`});
+    pc.parentElement.addEventListener('pointerleave',()=>pc.style.transform='');
+  }
+
+  /* ---- particle / starfield canvas ---- */
+  const cv=$('#fx'),cx=cv.getContext('2d');let W,H,pts=[],mx=innerWidth/2,my=innerHeight/2;
+  const cols=['#7c5cff','#00e5ff','#ff3d9a'];
+  function size(){const d=Math.min(devicePixelRatio||1,2);W=cv.width=innerWidth*d;H=cv.height=innerHeight*d;cv.style.width=innerWidth+'px';cv.style.height=innerHeight+'px';cx.setTransform(d,0,0,d,0,0);
+    const n=Math.round(innerWidth*innerHeight/14000);pts=Array.from({length:n},()=>({x:Math.random()*innerWidth,y:Math.random()*innerHeight,z:Math.random()*.9+.1,c:cols[Math.random()*3|0],s:Math.random()*1.8+.4}))}
+  addEventListener('resize',size);size();
+  function draw(){
+    cx.clearRect(0,0,innerWidth,innerHeight);
+    const ox=(mx-innerWidth/2)*.02,oy=(my-innerHeight/2)*.02;
+    for(const q of pts){
+      q.y-=q.z*.25;if(q.y<-5){q.y=innerHeight+5;q.x=Math.random()*innerWidth}
+      const x=q.x-ox*q.z*6,y=q.y-oy*q.z*6;
+      cx.globalAlpha=.25+q.z*.65;cx.fillStyle=q.c;cx.shadowColor=q.c;cx.shadowBlur=q.s*4;
+      cx.fillRect(x,y,q.s,q.s); /* pixel-style stars */
+    }
+    cx.globalAlpha=1;cx.shadowBlur=0;
+    if(!reduce)requestAnimationFrame(draw)
+  }
+  draw();
+
+  /* ---- konami easter egg ---- */
+  const kon=['ArrowUp','ArrowUp','ArrowDown','ArrowDown','ArrowLeft','ArrowRight','ArrowLeft','ArrowRight','b','a'];let ki=0;
+  addEventListener('keydown',e=>{
+    const k=e.key.length===1?e.key.toLowerCase():e.key;
+    ki=(k===kon[ki])?ki+1:(k===kon[0]?1:0);
+    if(ki===kon.length){ki=0;toast('Secret found! +30 lives. Hire this player. 🎮');
+      document.documentElement.style.setProperty('--a','#3dff8b');document.documentElement.style.setProperty('--c','#ffd24a');
+      setTimeout(()=>{document.documentElement.style.removeProperty('--a');document.documentElement.style.removeProperty('--c')},8000)}
+  });
+
+  /* ---- section unlock toasts ---- */
+  const seen=new Set();
+  const msgs={journey:'Level progression unlocked',trophies:'Trophy room unlocked: 11 medals',contact:'Final level reached — say hello!'};
+  const so=new IntersectionObserver(es=>es.forEach(e=>{
+    if(e.isIntersecting&&msgs[e.target.id]&&!seen.has(e.target.id)&&!document.body.classList.contains('locked')){seen.add(e.target.id);toast(msgs[e.target.id])}
+  }),{threshold:.4});
+  Object.keys(msgs).forEach(id=>so.observe($('#'+id)));
+})();
+</script>
+</body>
+</html>
